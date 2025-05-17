@@ -1,0 +1,99 @@
+build_release:
+    cargo build --release
+
+test: build_release
+    #!/usr/bin/env bash
+    set -euxo pipefail
+
+    # Get date time in format YYYYMMDDHHMMSS
+    datetime=$(date +"%Y%m%d%H%M%S")
+
+    /usr/bin/time -l ./target/release/taxozack \
+        _data/CO1_combined_taxonomy.txt \
+        _data/CO1_combined.cluster_cutoff_003.tsv \
+        _data/CO1_combined.cluster_cutoff_003.LCA.tsv \
+        2> "ERR_${datetime}"
+
+    diff \
+        <(sort _data/CO1_combined.cluster_cutoff_003.LCA.tsv) \
+        <(sort _data/CO1_combined.cluster_cutoff_003.LCA.tsv.expected)
+
+test_small: build_release
+    #!/usr/bin/env bash
+    set -euxo pipefail
+
+    datetime=$(date +"%Y-%m-%d_%H:%M:%S")
+
+    /usr/bin/time -l ./target/release/taxozack \
+        _data/small/taxonomy.txt \
+        _data/small/clusters.tsv \
+        _data/small/lca_out.tsv \
+        2> "_data/small/stderr.${datetime}.txt"
+
+    diff \
+        <(sort _data/small/lca_out.tsv) \
+        <(sort _data/small/lca_out.tsv.expected)
+
+bench_small: test_small
+    #!/usr/bin/env bash
+    set -euxo pipefail
+
+    hyperfine --warmup=3 --runs=3 \
+        "_data/small/taxozack_1 _data/small/taxonomy.txt _data/small/clusters.tsv _data/small/lca_out.tsv" \
+        "_data/small/taxozack_2 _data/small/taxonomy.txt _data/small/clusters.tsv _data/small/lca_out.tsv" \
+        "_data/small/taxozack_3 _data/small/taxonomy.txt _data/small/clusters.tsv _data/small/lca_out.tsv" \
+        "_data/small/taxozack_4 _data/small/taxonomy.txt _data/small/clusters.tsv _data/small/lca_out.tsv" \
+        "./target/release/taxozack _data/small/taxonomy.txt _data/small/clusters.tsv _data/small/lca_out.tsv"
+
+copy_exe number:
+    cp ./target/release/taxozack _data/small/taxozack_{{ number }}
+    
+    
+alloc: build_release
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    
+    cargo instruments \
+        --template Allocations \
+        _data/small/taxonomy.txt \
+        _data/small/clusters.tsv \
+        _data/small/tmp_out.tsv
+
+time: build_release
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    
+    cargo instruments \
+        --template time \
+        _data/small/taxonomy.txt \
+        _data/small/clusters.tsv \
+        _data/small/tmp_out.tsv
+
+valgrind:
+    #!/usr/bin/env bash
+    set -euxo pipefail
+
+    docker run --rm --platform=linux/amd64 -v $(pwd):$(pwd) \
+        valgrind --leak-check=full \
+        $(pwd)/target/x86_64-unknown-linux-gnu/debug/taxozack
+        
+dhat: cross_release
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    
+    datetime=$(date +"%Y-%m-%d_%H-%M-%S")
+
+    docker run --rm --platform=linux/amd64 -v $(pwd):$(pwd) \
+        valgrind \
+            --tool=dhat \
+            --dhat-out-file="$(pwd)/_bench/dhat.out.${datetime}" \
+            $(pwd)/target/x86_64-unknown-linux-gnu/release/taxozack \
+                $(pwd)/_data/small/taxonomy.txt \
+                $(pwd)/_data/small/clusters.tsv \
+                $(pwd)/_data/small/tmp_out.tsv
+        
+cross:
+    cross build --target=x86_64-unknown-linux-gnu
+
+cross_release:
+    cross build --target=x86_64-unknown-linux-gnu --release
