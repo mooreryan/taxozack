@@ -2,7 +2,17 @@
 
 ## Installation
 
-See the `Dockerfile` and `setup.R` for guidance.
+The quickest way to get started is to use `pak`. You don't need to worry about downloading the source code, or anything like that. Also, using `pak` will even install all the dependencies for you. Neat!
+
+```R
+# Install pak to manage the package install
+install.packages("pak")
+
+# Install taxozack + all dependencies
+pak::pak("https://github.com/mooreryan/taxozack")
+```
+
+This package only depends on Rcpp, so it should be quick to install!
 
 ## Example
 
