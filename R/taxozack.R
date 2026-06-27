@@ -1,5 +1,10 @@
 #' Calculate the LCA of a group of accession-taxonomy pairs.
 #'
+#' @param accessions A character vector of accession identifiers.
+#'
+#' @param taxonomy_strings A character vector of taxonomy strings corresponding
+#' to `accessions`. Must be the same length as `accessions`.
+#'
 #' @export
 #'
 #' @examples
@@ -8,10 +13,10 @@
 #'   Accession = c("AY956920.1", "AY956941.1", "AY957583.1", "AY957603.1"),
 #'   Cluster = c("1", "1", "2", "2"),
 #'   Taxonomy = c(
-#'     "Bacteria;Firmicutes;Bacilli;Bacillales;Bacillaceae;Bacillus;Bacillus sp. HPC 639",
-#'     "Bacteria;Firmicutes;Bacilli;Bacillales;Staphylococcaceae;Staphylococcus;Staphylococcus sp. HPC 904",
-#'     "Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens",
-#'     "Bacteria;Firmicutes;Clostridia;Eubacteriales;Clostridiaceae;Clostridium;Clostridium sp. pandaD"
+#'    "Bacteria;Firmicutes;Bacilli;Bacillales;Bacillaceae;Bacillus;Bacillus sp.",
+#'    "Bacteria;Firmicutes;Bacilli;Bacillales;Staphylococcaceae;Staphylococcus;Staphylococcus sp.",
+#'    "Eukaryota;Chordata;Mammalia;Primates;Hominidae;Homo;Homo sapiens",
+#'    "Bacteria;Firmicutes;Clostridia;Eubacteriales;Clostridiaceae;Clostridium;Clostridium sp."
 #'   ),
 #' )
 #'

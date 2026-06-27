@@ -4,6 +4,6 @@
 #' @useDynLib taxozack, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 lca_wrapper <- function(accessions, taxonomy_strings) {
-    .Call('_taxozack_lca_wrapper', PACKAGE = 'taxozack', accessions, taxonomy_strings)
+    .Call(`_taxozack_lca_wrapper`, accessions, taxonomy_strings)
 }
 
