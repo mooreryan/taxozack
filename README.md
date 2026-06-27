@@ -1,5 +1,11 @@
 # taxozack
 
+  <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/mooreryan/taxozack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mooreryan/taxozack/actions/workflows/R-CMD-check.yaml)
+
+  <!-- badges: end -->
+
 ## Installation
 
 The quickest way to get started is to use `pak`. You don't need to worry about downloading the source code, or anything like that. Also, using `pak` will even install all the dependencies for you. Neat!
