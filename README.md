@@ -38,3 +38,7 @@ within_cluster_lca <- df |>
 # 1       Bacteria;Firmicutes;Bacilli;Bacillales order
 # 2       NONE                                   NONE
 ```
+
+## Case Insensitive Matching
+
+Taxonomy field comparisons are case-insensitive: `"Bacteria"` and `"bacteria"` are treated as the same value. However, the original casing from the input is preserved in the returned taxonomy path.

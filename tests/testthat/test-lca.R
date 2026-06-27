@@ -684,6 +684,83 @@ describe("lca()", {
     })
   })
 
+  describe("case-insensitive comparison", {
+    it("treats taxonomy fields that differ only in case as identical", {
+      # "bacteria" vs "Bacteria" should match at domain and all shared levels.
+      a <- tax(
+        "BACTERIA",
+        "FIRMICUTES",
+        "BACILLI",
+        "BACILLALES",
+        "BACILLACEAE",
+        "BACILLUS",
+        "BACILLUS CEREUS"
+      )
+      b <- tax(
+        "bacteria",
+        "firmicutes",
+        "bacilli",
+        "bacillales",
+        "bacillaceae",
+        "bacillus",
+        "bacillus subtilis"
+      )
+      result <- lca(c("A", "B"), c(a, b))
+      # Species differ -> LCA is genus; domain case difference is not a mismatch.
+      expect_equal(result[[2]], "genus")
+    })
+
+    it("returns NONE only when domains genuinely differ, not just in case", {
+      # "BACTERIA" vs "bacteria" should NOT produce NONE.
+      a <- tax(
+        "BACTERIA",
+        "Firmicutes",
+        "Bacilli",
+        "Bacillales",
+        "Bacillaceae",
+        "Bacillus",
+        "Bacillus cereus"
+      )
+      b <- tax(
+        "bacteria",
+        "Proteobacteria",
+        "Gammaproteobacteria",
+        "Pseudomonadales",
+        "Pseudomonadaceae",
+        "Pseudomonas",
+        "Pseudomonas aeruginosa"
+      )
+      result <- lca(c("A", "B"), c(a, b))
+      expect_equal(result[[2]], "domain")
+    })
+
+    it("preserves original case of the first path in the returned taxonomy string", {
+      # Output case comes from the first path encountered.
+      a <- tax(
+        "BACTERIA",
+        "FIRMICUTES",
+        "BACILLI",
+        "BACILLALES",
+        "BACILLACEAE",
+        "BACILLUS",
+        "BACILLUS CEREUS"
+      )
+      b <- tax(
+        "bacteria",
+        "firmicutes",
+        "bacilli",
+        "bacillales",
+        "bacillaceae",
+        "bacillus",
+        "bacillus subtilis"
+      )
+      result <- lca(c("A", "B"), c(a, b))
+      expect_equal(result[[2]], "genus")
+      # The returned path preserves the case from the first input.
+      expect_true(startsWith(result[[1]], "BACTERIA"))
+    })
+  })
+
   describe("error handling", {
     it("errors when accessions and taxonomy_strings have different lengths", {
       expect_error(lca(c("A", "B"), c(BACILLUS)))

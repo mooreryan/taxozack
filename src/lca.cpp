@@ -1,4 +1,6 @@
 #include <Rcpp.h>
+#include <algorithm>
+#include <cctype>
 #include <string>
 #include <vector>
 
@@ -8,6 +10,13 @@ static const int N_LEVELS = 7;
 
 static const char *LEVEL_NAMES[N_LEVELS] = {
     "domain", "phylum", "class", "order", "family", "genus", "species"};
+
+// Returns a lowercase copy of s, used for case-insensitive comparisons.
+static std::string str_to_lower(std::string s) {
+  std::transform(s.begin(), s.end(), s.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  return s;
+}
 
 // Returns true when the field content should be treated as a missing value.
 static bool is_na_field(const std::string &field) {
@@ -126,7 +135,8 @@ CharacterVector lca_wrapper(CharacterVector accessions,
         first_is_some = is_some;
         first_prefix = prefix;
         first_set = true;
-      } else if (is_some != first_is_some || prefix != first_prefix) {
+      } else if (is_some != first_is_some ||
+                 str_to_lower(prefix) != str_to_lower(first_prefix)) {
         non_unique = true;
         break;
       }
