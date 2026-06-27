@@ -9,17 +9,28 @@
 
 ## Installation
 
-The quickest way to get started is to use `pak`. You don't need to worry about downloading the source code, or anything like that. Also, using `pak` will even install all the dependencies for you. Neat!
+The quickest way to get started is to use `pak`. You don't need to worry about downloading the source code, manually installing dependencies, or anything like that. `pak` is nice like that.
+
+The taxozack package only depends on Rcpp, so it should be quick to install!
+
+First install `pak` if you don't already have it:
 
 ```R
 # Install pak to manage the package install
 install.packages("pak")
-
-# Install taxozack + all dependencies
-pak::pak("https://github.com/mooreryan/taxozack")
 ```
 
-This package only depends on Rcpp, so it should be quick to install!
+Next, decide whether you want to install from a tagged version or from the main branch. It's generally a good idea to install from a tagged version.
+
+```R
+pak::pak("mooreryan/taxozack@1.0.0")
+```
+
+If you want to install from the latest commit on the main branch, do this:
+
+```R
+pak::pak("mooreryan/taxozack")
+```
 
 ## Example
 
