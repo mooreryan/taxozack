@@ -1,8 +1,10 @@
 ^.*\.Rproj$
+^\.clangd$
+^\.dockerignore$
+^\.lintr$
 ^\.Rproj\.user$
-^justfile$
 ^_.*$
+^Dockerfile$
+^justfile$
 ^LICENSE\.md$
 ^setup\.R$
-^Dockerfile$
-^\.dockerignore$
