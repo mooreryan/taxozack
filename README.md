@@ -3,6 +3,7 @@
   <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/mooreryan/taxozack/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mooreryan/taxozack/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/mooreryan/taxozack/graph/badge.svg)](https://app.codecov.io/gh/mooreryan/TaxoZack)
 
   <!-- badges: end -->
 
