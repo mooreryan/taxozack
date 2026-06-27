@@ -35,3 +35,20 @@ docker_shell:
     set -euxo pipefail
 
     docker run --rm -it -v $(pwd):$(pwd) taxozack:latest /bin/bash
+
+setup_dev:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    repo_root="$(pwd)"
+
+    (
+        printf "CompileFlags:\n"
+        printf "  Add:\n"
+        printf "    - \"-I%s/src/core/include\"\n" "$repo_root"
+        printf "    - \"-I%s/include\"\n" "$(Rscript -e 'cat(R.home())')"
+        printf "    - \"-I%s/include\"\n" "$(Rscript -e 'cat(find.package("Rcpp"))')"
+        printf "    - \"-I%s/include\"\n" "$(Rscript -e 'cat(find.package("RcppEigen"))')"
+    ) > .clangd
+
+    printf "Generated .clangd\n"

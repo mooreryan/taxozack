@@ -1,0 +1,6 @@
+CompileFlags:
+  Add:
+    - "-I/Users/ryan/Projects/uw/taxozack/src/core/include"
+    - "-I/Library/Frameworks/R.framework/Resources/include"
+    - "-I/Library/Frameworks/R.framework/Versions/4.6/Resources/library/Rcpp/include"
+    - "-I/Library/Frameworks/R.framework/Versions/4.6/Resources/library/RcppEigen/include"
